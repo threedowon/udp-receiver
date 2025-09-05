@@ -1,0 +1,14 @@
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\UDPReceiver.GeneratedMSBuildEditorConfig.editorconfig
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\UDPReceiver.AssemblyInfoInputs.cache
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\UDPReceiver.AssemblyInfo.cs
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\UDPReceiver.csproj.CoreCompileInputs.cache
+F:\Winform\UDPReceiver\bin\Debug\net6.0-windows\UDPReceiver.exe
+F:\Winform\UDPReceiver\bin\Debug\net6.0-windows\UDPReceiver.deps.json
+F:\Winform\UDPReceiver\bin\Debug\net6.0-windows\UDPReceiver.runtimeconfig.json
+F:\Winform\UDPReceiver\bin\Debug\net6.0-windows\UDPReceiver.dll
+F:\Winform\UDPReceiver\bin\Debug\net6.0-windows\UDPReceiver.pdb
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\UDPReceiver.dll
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\refint\UDPReceiver.dll
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\UDPReceiver.pdb
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\UDPReceiver.genruntimeconfig.cache
+F:\Winform\UDPReceiver\obj\Debug\net6.0-windows\ref\UDPReceiver.dll
