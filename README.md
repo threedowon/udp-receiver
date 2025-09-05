@@ -2,6 +2,8 @@
 
 .NET 6.0과 WinForms를 사용하여 만든 간단한 UDP 데이터 수신 애플리케이션입니다.
 
+<img width="792" height="475" alt="Image" src="https://github.com/user-attachments/assets/e93c0d67-cb52-48e8-8b1d-42a4f0ba1e80" />
+
 ## 📝 프로젝트 설명
 
 이 애플리케이션은 지정된 UDP 포트에서 데이터를 수신하여 화면에 표시하는 기능을 제공합니다. 네트워크 디버깅이나 간단한 UDP 통신 테스트에 유용하게 사용할 수 있습니다.
