@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UDPReceiver")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d0db088f5fb3236a43015cc669d987385606f1b3")]
 [assembly: System.Reflection.AssemblyProductAttribute("UDPReceiver")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UDPReceiver")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
