@@ -25,7 +25,7 @@ namespace UDPReceiver
             this.lblLocalIP = new System.Windows.Forms.Label();
             this.btnCopyIP = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.txtLog = new System.Windows.Forms.TextBox();
+            this.tabLogs = new System.Windows.Forms.TabControl();
             this.btnClearLog = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslPorts = new System.Windows.Forms.ToolStripStatusLabel();
@@ -145,10 +145,10 @@ namespace UDPReceiver
             this.btnCopyIP.Click += new System.EventHandler(this.btnCopyIP_Click);
 
             // ── groupBox3 : 수신 로그 ──────────────────────────────────────
-            this.groupBox3.Controls.Add(this.txtLog);
+            this.groupBox3.Controls.Add(this.tabLogs);
             this.groupBox3.Controls.Add(this.btnClearLog);
             this.groupBox3.Location = new System.Drawing.Point(410, 12);
-            this.groupBox3.Size = new System.Drawing.Size(550, 476);
+            this.groupBox3.Size = new System.Drawing.Size(730, 476);
             this.groupBox3.Text = "수신 로그";
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
@@ -157,26 +157,19 @@ namespace UDPReceiver
                                   | System.Windows.Forms.AnchorStyles.Bottom
                                   | System.Windows.Forms.AnchorStyles.Right;
 
-            // txtLog
-            this.txtLog.Location = new System.Drawing.Point(10, 22);
-            this.txtLog.Size = new System.Drawing.Size(530, 418);
-            this.txtLog.Multiline = true;
-            this.txtLog.ReadOnly = true;
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.TabIndex = 0;
-            this.txtLog.BackColor = System.Drawing.Color.FromArgb(18, 18, 24);
-            this.txtLog.ForeColor = System.Drawing.Color.LimeGreen;
-            this.txtLog.Font = new System.Drawing.Font("Consolas", 9f);
-            this.txtLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtLog.Anchor = System.Windows.Forms.AnchorStyles.Top
-                               | System.Windows.Forms.AnchorStyles.Left
-                               | System.Windows.Forms.AnchorStyles.Bottom
-                               | System.Windows.Forms.AnchorStyles.Right;
+            // tabLogs
+            this.tabLogs.Location = new System.Drawing.Point(8, 20);
+            this.tabLogs.Size = new System.Drawing.Size(714, 416);
+            this.tabLogs.TabIndex = 0;
+            this.tabLogs.Anchor = System.Windows.Forms.AnchorStyles.Top
+                                | System.Windows.Forms.AnchorStyles.Left
+                                | System.Windows.Forms.AnchorStyles.Bottom
+                                | System.Windows.Forms.AnchorStyles.Right;
 
             // btnClearLog
-            this.btnClearLog.Location = new System.Drawing.Point(450, 448);
-            this.btnClearLog.Size = new System.Drawing.Size(90, 26);
-            this.btnClearLog.Text = "로그 지우기";
+            this.btnClearLog.Location = new System.Drawing.Point(614, 447);
+            this.btnClearLog.Size = new System.Drawing.Size(106, 26);
+            this.btnClearLog.Text = "현재 탭 지우기";
             this.btnClearLog.TabIndex = 1;
             this.btnClearLog.UseVisualStyleBackColor = true;
             this.btnClearLog.Anchor = System.Windows.Forms.AnchorStyles.Bottom
@@ -209,7 +202,7 @@ namespace UDPReceiver
             // ── ReceiverForm ───────────────────────────────────────────────
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(972, 520);
+            this.ClientSize = new System.Drawing.Size(1152, 520);
             this.MinimumSize = new System.Drawing.Size(900, 560);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
@@ -225,7 +218,6 @@ namespace UDPReceiver
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -244,7 +236,7 @@ namespace UDPReceiver
         private System.Windows.Forms.Label lblLocalIP;
         private System.Windows.Forms.Button btnCopyIP;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.TabControl tabLogs;
         private System.Windows.Forms.Button btnClearLog;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tsslPorts;

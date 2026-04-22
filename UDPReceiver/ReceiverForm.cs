@@ -29,6 +29,7 @@ namespace UDPReceiver
         private void ReceiverForm_Load(object? sender, EventArgs e)
         {
             SetupDataGridView();
+            SetupLogTabs();
             txtNewPort.Text = "7777";
             UpdateLocalIPLabel();
             UpdateStatusBar();
@@ -43,6 +44,73 @@ namespace UDPReceiver
                 }
             };
         }
+
+        // ── 탭 로그 관리 ──────────────────────────────────────────────────
+
+        private void SetupLogTabs()
+        {
+            var allTab = new TabPage { Text = "전체", Name = "tab_all" };
+            allTab.Controls.Add(CreateLogBox());
+            tabLogs.TabPages.Add(allTab);
+        }
+
+        private TextBox CreateLogBox()
+        {
+            return new TextBox
+            {
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                ReadOnly = true,
+                ScrollBars = ScrollBars.Vertical,
+                BackColor = Color.FromArgb(18, 18, 24),
+                ForeColor = Color.LimeGreen,
+                Font = new Font("Consolas", 9f),
+                BorderStyle = BorderStyle.None,
+            };
+        }
+
+        private TextBox? GetTabBox(string tabName)
+        {
+            if (!tabLogs.TabPages.ContainsKey(tabName)) return null;
+            return tabLogs.TabPages[tabName].Controls.OfType<TextBox>().FirstOrDefault();
+        }
+
+        private void AppendLog(string tabName, string line)
+        {
+            var box = GetTabBox(tabName);
+            if (box == null) return;
+            box.AppendText(line);
+            box.ScrollToCaret();
+        }
+
+        private void LogMessage(string message)
+        {
+            var line = $"[{DateTime.Now:HH:mm:ss.fff}] {message}{Environment.NewLine}";
+            AppendLog("tab_all", line);
+        }
+
+        private void LogPortMessage(int port, string message)
+        {
+            var line = $"[{DateTime.Now:HH:mm:ss.fff}] {message}{Environment.NewLine}";
+            AppendLog("tab_all", line);
+            AppendLog($"tab_{port}", line);
+        }
+
+        private void AddPortTab(int port)
+        {
+            var tabName = $"tab_{port}";
+            if (tabLogs.TabPages.ContainsKey(tabName)) return;
+            var page = new TabPage { Text = $":{port}", Name = tabName };
+            page.Controls.Add(CreateLogBox());
+            tabLogs.TabPages.Add(page);
+        }
+
+        private void RemovePortTab(int port)
+        {
+            tabLogs.TabPages.RemoveByKey($"tab_{port}");
+        }
+
+        // ── DataGridView 설정 ─────────────────────────────────────────────
 
         private void SetupDataGridView()
         {
@@ -62,10 +130,10 @@ namespace UDPReceiver
             dgvPorts.BackgroundColor = SystemColors.Window;
             dgvPorts.DefaultCellStyle.SelectionBackColor = Color.LightSteelBlue;
             dgvPorts.DefaultCellStyle.SelectionForeColor = Color.Black;
-            dgvPorts.ColumnHeadersDefaultCellStyle.Font = new Font(dgvPorts.Font, FontStyle.Bold);
             dgvPorts.EnableHeadersVisualStyles = false;
             dgvPorts.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(50, 50, 60);
             dgvPorts.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvPorts.ColumnHeadersDefaultCellStyle.Font = new Font(dgvPorts.Font, FontStyle.Bold);
 
             dgvPorts.CellFormatting += DgvPorts_CellFormatting;
             dgvPorts.CellClick += DgvPorts_CellClick;
@@ -82,9 +150,7 @@ namespace UDPReceiver
             if (listener == null) return;
 
             if (e.ColumnIndex == dgvPorts.Columns["colToggle"]!.Index)
-            {
                 e.Value = listener.IsListening ? "중지" : "시작";
-            }
         }
 
         private void ApplyStatusStyle(DataGridViewRow row, bool isListening)
@@ -111,6 +177,8 @@ namespace UDPReceiver
                 StartListener(listener);
         }
 
+        // ── 포트 추가/제거 ────────────────────────────────────────────────
+
         private void btnAddPort_Click(object? sender, EventArgs e)
         {
             if (!int.TryParse(txtNewPort.Text.Trim(), out int port) || port < 1 || port > 65535)
@@ -133,8 +201,9 @@ namespace UDPReceiver
             newRow.Tag = port;
             ApplyStatusStyle(newRow, isListening: false);
 
+            AddPortTab(port);
             UpdateStatusBar();
-            LogMessage($"[포트 {port}] 목록에 추가됨 (수신 시작 버튼을 눌러주세요)");
+            LogPortMessage(port, $"[포트 {port}] 목록에 추가됨");
         }
 
         private void btnRemovePort_Click(object sender, EventArgs e)
@@ -151,6 +220,7 @@ namespace UDPReceiver
             }
 
             dgvPorts.Rows.Remove(row);
+            RemovePortTab(port);
             UpdateStatusBar();
         }
 
@@ -166,6 +236,8 @@ namespace UDPReceiver
                 StopListener(l);
         }
 
+        // ── 수신 제어 ────────────────────────────────────────────────────
+
         private void StartListener(PortListener listener)
         {
             try
@@ -176,7 +248,7 @@ namespace UDPReceiver
 
                 RefreshPortRow(listener);
                 UpdateStatusBar();
-                LogMessage($"[포트 {listener.Port}] 수신 시작됨");
+                LogPortMessage(listener.Port, $"[포트 {listener.Port}] 수신 시작됨");
 
                 _ = ReceiveLoopAsync(listener);
             }
@@ -186,7 +258,7 @@ namespace UDPReceiver
                 listener.Client?.Close();
                 listener.Client = null;
                 RefreshPortRow(listener);
-                LogMessage($"[포트 {listener.Port}] 시작 실패: {ex.Message}");
+                LogPortMessage(listener.Port, $"[포트 {listener.Port}] 시작 실패: {ex.Message}");
                 MessageBox.Show($"포트 {listener.Port} 시작 실패:\n{ex.Message}", "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -205,7 +277,7 @@ namespace UDPReceiver
                 listener.IsListening = false;
                 RefreshPortRow(listener);
                 UpdateStatusBar();
-                LogMessage($"[포트 {listener.Port}] 수신 중지됨");
+                LogPortMessage(listener.Port, $"[포트 {listener.Port}] 수신 중지됨");
             }
         }
 
@@ -233,8 +305,8 @@ namespace UDPReceiver
                         RefreshPortRow(listener);
                         FlashRow(listener.Port);
                         UpdateStatusBar();
-                        LogMessage($"[:{listener.Port}] #{listener.PacketCount}  {remoteEp}  →  {dataSize}B");
-                        LogMessage($"  {message}");
+                        LogPortMessage(listener.Port, $"[:{listener.Port}] #{listener.PacketCount}  {remoteEp}  →  {dataSize} Byte");
+                        LogPortMessage(listener.Port, $"  {message}");
                     });
                 }
             }
@@ -250,11 +322,13 @@ namespace UDPReceiver
                         listener.Client = null;
                         RefreshPortRow(listener);
                         UpdateStatusBar();
-                        LogMessage($"[포트 {listener.Port}] 오류로 중단됨: {ex.Message}");
+                        LogPortMessage(listener.Port, $"[포트 {listener.Port}] 오류로 중단됨: {ex.Message}");
                     }
                 });
             }
         }
+
+        // ── 그리드 갱신 ──────────────────────────────────────────────────
 
         private void RefreshPortRow(PortListener listener)
         {
@@ -291,6 +365,8 @@ namespace UDPReceiver
             return -1;
         }
 
+        // ── 기타 ─────────────────────────────────────────────────────────
+
         private void UpdateLocalIPLabel()
         {
             lblLocalIP.Text = $"로컬 IP: {GetLocalIPAddress()}";
@@ -305,20 +381,17 @@ namespace UDPReceiver
             tsslPackets.Text = $"전체 패킷: {_totalPackets:N0}";
         }
 
-        private void btnClearLog_Click(object sender, EventArgs e) => txtLog.Clear();
+        private void btnClearLog_Click(object sender, EventArgs e)
+        {
+            var box = tabLogs.SelectedTab?.Controls.OfType<TextBox>().FirstOrDefault();
+            box?.Clear();
+        }
 
         private void btnCopyIP_Click(object sender, EventArgs e)
         {
             var ip = GetLocalIPAddress();
             Clipboard.SetText(ip);
             LogMessage($"IP 복사됨: {ip}");
-        }
-
-        private void LogMessage(string message)
-        {
-            var ts = DateTime.Now.ToString("HH:mm:ss.fff");
-            txtLog.AppendText($"[{ts}] {message}{Environment.NewLine}");
-            txtLog.ScrollToCaret();
         }
 
         private string GetLocalIPAddress()
